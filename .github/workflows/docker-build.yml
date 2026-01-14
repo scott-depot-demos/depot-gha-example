@@ -50,6 +50,8 @@ jobs:
       - name: Build and push with Depot
         uses: depot/build-push-action@v1
         with:
+          project: ${{ secrets.DEPOT_PROJECT_ID }}
+          token: ${{ secrets.DEPOT_PROJECT_TOKEN }}
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
