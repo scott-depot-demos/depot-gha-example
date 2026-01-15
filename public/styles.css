@@ -5,23 +5,27 @@
 }
 
 :root {
-    --primary-color: #6366f1;
-    --primary-dark: #4f46e5;
-    --secondary-color: #8b5cf6;
+    --primary-light: #EEEEF0;
+    --primary-dark: #191719;
+    --accent-color: #46A75A;
+    --accent-hover: #3d8f4f;
+    --secondary-color: #6b7280;
     --danger-color: #ef4444;
     --danger-dark: #dc2626;
-    --bg-dark: #0f172a;
-    --bg-card: #1e293b;
-    --bg-card-hover: #334155;
+    --bg-dark: #191719;
+    --bg-card: #EEEEF0;
+    --bg-card-hover: #e0e0e2;
     --text-primary: #f1f5f9;
+    --text-primary-dark: #191719;
     --text-secondary: #cbd5e1;
-    --border-color: #334155;
-    --success-color: #10b981;
+    --text-secondary-dark: #4b5563;
+    --border-color: #d1d5db;
+    --success-color: #46A75A;
 }
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    background: linear-gradient(135deg, var(--primary-dark) 0%, #2a2529 100%);
     color: var(--text-primary);
     min-height: 100vh;
     padding: 2rem;
@@ -41,7 +45,7 @@ header {
 header h1 {
     font-size: 3rem;
     margin-bottom: 0.5rem;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    background: linear-gradient(135deg, var(--accent-color), #5fb872);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -61,15 +65,16 @@ header h1 {
     background: var(--bg-card);
     border-radius: 0.75rem;
     border: 1px solid var(--border-color);
+    color: var(--text-primary-dark);
 }
 
 .collection-stats {
-    color: var(--text-secondary);
+    color: var(--text-secondary-dark);
     font-size: 0.95rem;
 }
 
 .collection-stats span {
-    color: var(--primary-color);
+    color: var(--accent-color);
     font-weight: 700;
     font-size: 1.25rem;
 }
@@ -87,25 +92,25 @@ header h1 {
 }
 
 .btn-primary {
-    background: var(--primary-color);
+    background: var(--accent-color);
     color: white;
 }
 
 .btn-primary:hover {
-    background: var(--primary-dark);
+    background: var(--accent-hover);
     transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+    box-shadow: 0 10px 20px rgba(70, 167, 90, 0.3);
 }
 
 .btn-secondary {
-    background: var(--bg-dark);
-    color: var(--text-primary);
+    background: transparent;
+    color: var(--text-primary-dark);
     border: 2px solid var(--border-color);
 }
 
 .btn-secondary:hover {
-    border-color: var(--primary-color);
-    background: var(--bg-card);
+    border-color: var(--accent-color);
+    background: var(--bg-card-hover);
 }
 
 .btn-danger {
@@ -134,6 +139,7 @@ header h1 {
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    color: var(--text-primary-dark);
 }
 
 .record-card::before {
@@ -143,15 +149,15 @@ header h1 {
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    background: linear-gradient(90deg, var(--accent-color), #5fb872);
     transform: scaleX(0);
     transition: transform 0.3s ease;
 }
 
 .record-card:hover {
-    border-color: var(--primary-color);
+    border-color: var(--accent-color);
     transform: translateY(-4px);
-    box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
+    box-shadow: 0 20px 40px rgba(70, 167, 90, 0.2);
 }
 
 .record-card:hover::before {
@@ -172,13 +178,13 @@ header h1 {
 .record-artist {
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--text-primary);
+    color: var(--text-primary-dark);
     margin-bottom: 0.25rem;
 }
 
 .record-album {
     font-size: 1rem;
-    color: var(--text-secondary);
+    color: var(--text-secondary-dark);
     font-weight: 500;
 }
 
@@ -190,7 +196,7 @@ header h1 {
 .btn-icon {
     background: transparent;
     border: none;
-    color: var(--text-secondary);
+    color: var(--text-secondary-dark);
     cursor: pointer;
     padding: 0.5rem;
     border-radius: 0.375rem;
@@ -205,7 +211,7 @@ header h1 {
 
 .btn-icon:hover {
     background: var(--bg-card-hover);
-    color: var(--primary-color);
+    color: var(--accent-color);
 }
 
 .btn-icon.delete:hover {
@@ -223,11 +229,11 @@ header h1 {
     align-items: center;
     gap: 0.5rem;
     font-size: 0.9rem;
-    color: var(--text-secondary);
+    color: var(--text-secondary-dark);
 }
 
 .record-detail strong {
-    color: var(--text-primary);
+    color: var(--text-primary-dark);
     min-width: 80px;
 }
 
@@ -236,7 +242,7 @@ header h1 {
     padding-top: 0.75rem;
     border-top: 1px solid var(--border-color);
     font-size: 0.875rem;
-    color: var(--text-secondary);
+    color: var(--text-secondary-dark);
     font-style: italic;
 }
 
@@ -246,6 +252,7 @@ header h1 {
     background: var(--bg-card);
     border-radius: 1rem;
     border: 2px dashed var(--border-color);
+    color: var(--text-primary-dark);
 }
 
 .empty-icon {
@@ -256,11 +263,11 @@ header h1 {
 .empty-state h2 {
     font-size: 1.5rem;
     margin-bottom: 0.5rem;
-    color: var(--text-primary);
+    color: var(--text-primary-dark);
 }
 
 .empty-state p {
-    color: var(--text-secondary);
+    color: var(--text-secondary-dark);
     margin-bottom: 1.5rem;
 }
 
@@ -299,6 +306,7 @@ header h1 {
     overflow-y: auto;
     border: 2px solid var(--border-color);
     animation: slideUp 0.3s ease;
+    color: var(--text-primary-dark);
 }
 
 .modal-small {
@@ -326,13 +334,13 @@ header h1 {
 
 .modal-header h2 {
     font-size: 1.5rem;
-    color: var(--text-primary);
+    color: var(--text-primary-dark);
 }
 
 .modal-close {
     background: none;
     border: none;
-    color: var(--text-secondary);
+    color: var(--text-secondary-dark);
     font-size: 2rem;
     cursor: pointer;
     width: 2.5rem;
@@ -346,11 +354,12 @@ header h1 {
 
 .modal-close:hover {
     background: var(--bg-card-hover);
-    color: var(--text-primary);
+    color: var(--text-primary-dark);
 }
 
 .modal-body {
     padding: 1.5rem;
+    color: var(--text-primary-dark);
 }
 
 form {
@@ -370,7 +379,7 @@ form {
 label {
     display: block;
     margin-bottom: 0.5rem;
-    color: var(--text-primary);
+    color: var(--text-primary-dark);
     font-weight: 500;
     font-size: 0.9rem;
 }
@@ -381,10 +390,10 @@ select,
 textarea {
     width: 100%;
     padding: 0.75rem;
-    background: var(--bg-dark);
+    background: white;
     border: 2px solid var(--border-color);
     border-radius: 0.5rem;
-    color: var(--text-primary);
+    color: var(--text-primary-dark);
     font-size: 1rem;
     font-family: inherit;
     transition: all 0.2s ease;
@@ -395,8 +404,8 @@ input[type="number"]:focus,
 select:focus,
 textarea:focus {
     outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(70, 167, 90, 0.1);
 }
 
 textarea {
@@ -414,19 +423,19 @@ textarea {
 }
 
 .delete-record-info {
-    background: var(--bg-dark);
+    background: #f3f4f6;
     padding: 1rem;
     border-radius: 0.5rem;
     margin-top: 1rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--text-primary-dark);
 }
 
 /* Loading state */
 .loading {
     text-align: center;
     padding: 2rem;
-    color: var(--text-secondary);
+    color: var(--text-primary);
 }
 
 /* Responsive */
