@@ -38,7 +38,8 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.GH_TOKEN }}
+          # Prefer a PAT if you provided one; otherwise use the built-in token (requires packages: write).
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract metadata
         id: meta
@@ -58,7 +59,8 @@ jobs:
           project: ${{ secrets.DEPOT_PROJECT_ID }}
           token: ${{ secrets.DEPOT_PROJECT_TOKEN }}
           context: .
-          push: true
+          # Avoid pushing on PRs (common source of 401s, especially for forks).
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
@@ -90,7 +92,8 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.GH_TOKEN }}
+          # Prefer a PAT if you provided one; otherwise use the built-in token (requires packages: write).
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract metadata
         id: meta
