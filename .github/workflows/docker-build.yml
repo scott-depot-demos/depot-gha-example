@@ -18,10 +18,16 @@ jobs:
     permissions:
       contents: read
       packages: write
+    outputs:
+      duration_s: ${{ steps.timing.outputs.duration_s }}
     
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Start timer
+        shell: bash
+        run: echo "JOB_START=$(date +%s)" >> "$GITHUB_ENV"
 
       - name: Compute lowercase image name
         id: image
@@ -80,16 +86,30 @@ jobs:
           cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/${{ steps.image.outputs.repo }}:buildcache
           cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/${{ steps.image.outputs.repo }}:buildcache,mode=max
 
+      - name: Stop timer
+        id: timing
+        if: always()
+        shell: bash
+        run: |
+          end=$(date +%s)
+          echo "duration_s=$(( end - JOB_START ))" >> "$GITHUB_OUTPUT"
+
   build-standard:
     name: Build Standard (Comparison)
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
+    outputs:
+      duration_s: ${{ steps.timing.outputs.duration_s }}
     
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Start timer
+        shell: bash
+        run: echo "JOB_START=$(date +%s)" >> "$GITHUB_ENV"
 
       - name: Compute lowercase image name
         id: image
@@ -132,6 +152,14 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Stop timer
+        id: timing
+        if: always()
+        shell: bash
+        run: |
+          end=$(date +%s)
+          echo "duration_s=$(( end - JOB_START ))" >> "$GITHUB_OUTPUT"
+
   build-standard-depot-runner:
     name: Build Standard on Depot Runner (Comparison)
     # Depot GitHub Actions Runner (pick the runner type you enabled in Depot)
@@ -139,10 +167,16 @@ jobs:
     permissions:
       contents: read
       packages: write
+    outputs:
+      duration_s: ${{ steps.timing.outputs.duration_s }}
     
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Start timer
+        shell: bash
+        run: echo "JOB_START=$(date +%s)" >> "$GITHUB_ENV"
 
       - name: Compute lowercase image name
         id: image
@@ -185,6 +219,14 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Stop timer
+        id: timing
+        if: always()
+        shell: bash
+        run: |
+          end=$(date +%s)
+          echo "duration_s=$(( end - JOB_START ))" >> "$GITHUB_OUTPUT"
+
   compare-results:
     name: Compare Build Times
     runs-on: ubuntu-latest
@@ -196,10 +238,10 @@ jobs:
         run: |
           echo "## Build Time Comparison" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Method | Status |" >> $GITHUB_STEP_SUMMARY
-          echo "|--------|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Depot Build (Depot builders) | ${{ needs.build-with-depot.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Standard Build (GitHub runner) | ${{ needs.build-standard.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Standard Build (Depot runner) | ${{ needs.build-standard-depot-runner.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Method | Status | Duration (s) |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|--------|--------------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Depot Build (Depot builders) | ${{ needs.build-with-depot.result }} | ${{ needs.build-with-depot.outputs.duration_s }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Standard Build (GitHub runner) | ${{ needs.build-standard.result }} | ${{ needs.build-standard.outputs.duration_s }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Standard Build (Depot runner) | ${{ needs.build-standard-depot-runner.result }} | ${{ needs.build-standard-depot-runner.outputs.duration_s }} |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Check the workflow logs to see detailed timing information." >> $GITHUB_STEP_SUMMARY
