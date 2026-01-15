@@ -54,18 +54,31 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=sha,prefix=sha-
 
-      - name: Build and push with Depot
+      - name: Depot build (PR - no push, no cache)
+        if: ${{ github.event_name == 'pull_request' }}
         uses: depot/build-push-action@v1
         with:
           project: ${{ secrets.DEPOT_PROJECT_ID }}
           token: ${{ secrets.DEPOT_PROJECT_TOKEN }}
           context: .
-          # Avoid pushing on PRs (common source of 401s, especially for forks).
-          push: ${{ github.event_name != 'pull_request' }}
+          # PR builds: don't push and don't use GHA cache (it can fail on the remote builder).
+          push: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+
+      - name: Depot build & push (push/workflow_dispatch)
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: depot/build-push-action@v1
+        with:
+          project: ${{ secrets.DEPOT_PROJECT_ID }}
+          token: ${{ secrets.DEPOT_PROJECT_TOKEN }}
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          # Push builds: use a registry-backed cache in Docker Hub instead of GHA cache.
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/${{ steps.image.outputs.repo }}:buildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/${{ steps.image.outputs.repo }}:buildcache,mode=max
 
   build-standard:
     name: Build Standard (Comparison)
